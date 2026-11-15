@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UniAssist AI</title>
+  <link rel="stylesheet" href="/static/style.css?v=2">
+</head>
+<body>
+  <!-- Authentication View -->
+  <div id="auth" class="auth-wrap">
+    <section class="auth-card">
+      <div class="brand-mark">U</div>
+      <p class="eyebrow">YOUR CAMPUS COMPANION</p>
+      <h1>Learn smarter.<br><span>Move forward.</span></h1>
+      <p class="muted">Your AI-powered university support desk.</p>
+
+      <div class="tabs">
+        <button id="loginTab" class="active">Sign in</button>
+        <button id="registerTab">Create account</button>
+      </div>
+
+      <form id="authForm">
+        <div id="nameField" class="hidden">
+          <label>Full name</label>
+          <input id="name" placeholder="Your name">
+        </div>
+        <label>Email address</label>
+        <input id="email" type="email" required placeholder="you@example.com">
+        <label>Password</label>
+        <input id="password" type="password" required minlength="8" placeholder="At least 8 characters">
+        <button class="primary full" type="submit" id="authSubmit">Continue <span>→</span></button>
+        <p id="authError" class="error"></p>
+      </form>
+      <small>Private workspace · Secure sign-in</small>
+    </section>
+  </div>
+
+  <!-- App Shell -->
+  <div id="app" class="shell hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">U</div>
+        <div>
+          <b>UniAssist</b>
+          <small>STUDENT SPACE</small>
+        </div>
+      </div>
+      <nav>
+        <button class="nav active" data-view="chat">✦ <span>AI Assistant</span></button>
+        <button class="nav" data-view="planner">▦ <span>Study planner</span></button>
+        <button class="nav" data-view="documents">▤ <span>My documents</span></button>
+      </nav>
+      <div class="side-bottom">
+        <div class="status"><i></i><span id="modeText">Local assistant ready</span></div>
+        <button id="logout" class="logout">↪ Sign out</button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main">
+      <header>
+        <div>
+          <p class="eyebrow" id="pageEyebrow">UNIVERSITY, SIMPLIFIED</p>
+          <h2 id="pageTitle">AI Assistant</h2>
+        </div>
+        <div class="user-pill">
+          <div class="avatar" id="avatar">S</div>
+          <span id="userName">Student</span>
+        </div>
+      </header>
+
+      <!-- Chat View -->
+      <section id="chatView" class="view">
+        <div class="chat-layout">
+          <div class="chat-main">
+            <div id="messages" class="messages">
+              <div class="welcome">
+                <div class="sparkle">✦</div>
+                <h2>What would you like to<br><span>work on today?</span></h2>
+                <p>Ask a question, organise your study time or search your uploaded notes.</p>
+                <div class="suggestions">
+                  <button data-prompt="Create a 7-day study plan for my exams">✧ Build an exam study plan</button>
+                  <button data-prompt="Explain a difficult academic concept in simple terms">⌁ Explain a concept simply</button>
+                  <button data-prompt="Find information in my uploaded documents">▤ Search my documents</button>
+                </div>
+              </div>
+            </div>
+            <form id="chatForm" class="composer">
+              <textarea id="messageInput" rows="1" placeholder="Ask UniAssist anything…"></textarea>
+              <button class="send" type="submit" title="Send message">↑</button>
+            </form>
+            <p class="disclaimer">AI can make mistakes. Verify important academic policies with your university.</p>
+          </div>
+
+          <aside class="right-rail">
+            <div class="rail-card">
+              <p class="eyebrow">YOUR AI TEAM</p>
+              <h3>Specialists working<br>together for you</h3>
+              <div class="agent">
+                <b>✦</b>
+                <span><strong>Academic Advisor</strong><small>Courses & concepts</small></span>
+              </div>
+              <div class="agent">
+                <b>◷</b>
+                <span><strong>Study Planner</strong><small>Goals & routines</small></span>
+              </div>
+              <div class="agent">
+                <b>▤</b>
+                <span><strong>Document Researcher</strong><small>PDF knowledge search</small></span>
+              </div>
+              <div class="agent">
+                <b>⌂</b>
+                <span><strong>Student Support</strong><small>Campus guidance</small></span>
+              </div>
+            </div>
+            <div class="rail-note">
+              <b>✧ A small tip</b>
+              <p>Upload your syllabus or handbook to get answers grounded in your own documents.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Study Planner View -->
+      <section id="plannerView" class="view hidden">
+        <div class="page-container">
+          <div class="content-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">STAY ON TRACK</p>
+                <h3>Your study tasks</h3>
+                <p class="muted">Add deadlines and study milestones to plan your academic week.</p>
+              </div>
+            </div>
+            <form id="taskForm" class="task-form">
+              <input id="taskTitle" placeholder="What do you need to study or complete?" required>
+              <input id="taskDate" type="date">
+              <button class="primary" type="submit">Add task</button>
+            </form>
+            <div class="list-section">
+              <div class="list-header">
+                <span class="muted">Active & completed tasks</span>
+              </div>
+              <div id="tasks" class="task-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Documents View -->
+      <section id="documentsView" class="view hidden">
+        <div class="page-container">
+          <div class="content-card">
+            <div class="card-header">
+              <div>
+                <p class="eyebrow">YOUR KNOWLEDGE SPACE</p>
+                <h3>Upload course documents</h3>
+                <p class="muted">Add text-based PDF notes, syllabi or handbooks. Ask the assistant questions about them in chat.</p>
+              </div>
+            </div>
+            <form id="uploadForm" class="upload">
+              <input type="file" id="pdfFile" accept="application/pdf" required>
+              <button class="primary" type="submit">Upload PDF</button>
+            </form>
+            <p id="uploadStatus" class="upload-status"></p>
+            <div class="list-section">
+              <div class="list-header">
+                <span class="muted">Stored documents</span>
+              </div>
+              <div id="docs" class="doc-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js?v=2"></script>
+</body>
+</html>

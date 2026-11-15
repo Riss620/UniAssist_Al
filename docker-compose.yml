@@ -1,0 +1,11 @@
+services:
+  uniassist:
+    build: .
+    ports: ["8000:8000"]
+    env_file: .env
+    environment:
+      DATABASE_PATH: /app/data/uniassist.db
+    volumes:
+      - uniassist_data:/app/data
+volumes:
+  uniassist_data:
