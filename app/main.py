@@ -26,8 +26,11 @@ class TaskIn(BaseModel): title:str; due_date:str|None=None
 def home(): return FileResponse(STATIC/'index.html')
 @app.get('/health')
 def health():
-    configured=bool(os.getenv('AZURE_OPENAI_ENDPOINT') or os.getenv('OPENAI_BASE_URL')) and bool(os.getenv('AZURE_OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')) and bool(os.getenv('AZURE_OPENAI_DEPLOYMENT') or os.getenv('OPENAI_MODEL'))
-    return {'status':'ok','version':'2.0.0','ai_configured':configured,'mode':'live-capable' if configured else 'local-fallback'}
+    has_gemini = bool(os.getenv('GEMINI_API_KEY'))
+    has_openai = bool(os.getenv('AZURE_OPENAI_ENDPOINT') or os.getenv('OPENAI_BASE_URL')) and bool(os.getenv('AZURE_OPENAI_API_KEY') or os.getenv('OPENAI_API_KEY')) and bool(os.getenv('AZURE_OPENAI_DEPLOYMENT') or os.getenv('OPENAI_MODEL'))
+    configured = has_gemini or has_openai
+    provider = 'gemini' if has_gemini else ('openai/azure' if has_openai else 'none')
+    return {'status':'ok','version':'2.0.0','ai_configured':configured,'provider':provider,'mode':'live-capable' if configured else 'local-fallback'}
 @app.post('/api/register')
 def register(x:RegisterIn):
     if len(x.password)<8: raise HTTPException(400,'Password must be at least 8 characters')
